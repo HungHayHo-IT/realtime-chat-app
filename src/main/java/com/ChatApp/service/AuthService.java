@@ -1,8 +1,10 @@
 package com.ChatApp.service;
 
+import com.ChatApp.dto.LoginRequest;
 import com.ChatApp.dto.RegisterRequest;
 import com.ChatApp.entity.User;
 import com.ChatApp.exception.DuplicateResourceException;
+import com.ChatApp.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,5 +33,21 @@ public class AuthService {
                 .build();
 
         return userService.createUser(user);
+    }
+
+    public User login(LoginRequest request) {
+
+        User user = userService.findByEmail(request.getEmail());
+
+        if (!passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        )) {
+            throw new InvalidCredentialsException(
+                    "Invalid email or password"
+            );
+        }
+
+        return user;
     }
 }
