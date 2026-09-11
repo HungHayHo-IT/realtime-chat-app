@@ -1,6 +1,7 @@
 package com.ChatApp.controller;
 
 import com.ChatApp.dto.RegisterRequest;
+import com.ChatApp.dto.UserResponse;
 import com.ChatApp.entity.User;
 import com.ChatApp.service.AuthService;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(
+    public ResponseEntity<UserResponse> register(
             @Valid @RequestBody RegisterRequest request
     ) {
 
@@ -28,6 +29,6 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(user);
+                .body(UserResponse.from(user));
     }
 }
